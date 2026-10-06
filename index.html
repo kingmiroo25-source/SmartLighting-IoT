@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Home Lighting IoT</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Background Decor -->
+    <div class="bg-decor">
+        <div class="bg-glow bg-glow-1"></div>
+        <div class="bg-glow bg-glow-2"></div>
+        <div class="bg-grid"></div>
+    </div>
+
+    <!-- Navbar Horizontal -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-microchip"></i>
+            </div>
+            <div class="brand-text">
+                <h1>Smart Home Lighting IoT</h1>
+                <p>Workshop IoT · Kelompok 3</p>
+            </div>
+        </div>
+
+        <div class="nav-menu">
+            <button class="tab-link active" onclick="openPage(event, 'page-dashboard')">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Dashboard</span>
+            </button>
+            <button class="tab-link" onclick="openPage(event, 'page-logs')">
+                <i class="fa-solid fa-list-check"></i>
+                <span>Riwayat Event</span>
+            </button>
+            <button class="tab-link" onclick="openPage(event, 'page-settings')">
+                <i class="fa-solid fa-gear"></i>
+                <span>Pengaturan</span>
+            </button>
+        </div>
+
+        <div class="nav-status">
+            <span class="status-dot"></span>
+            <span>Broker Connected</span>
+        </div>
+    </nav>
+
+    <!-- Page Wrapper -->
+    <div class="page-wrapper">
+
+        <!-- Main Container -->
+        <div class="main-container">
+
+            <!-- PAGE 1: DASHBOARD -->
+            <div id="page-dashboard" class="page-content active">
+                
+                <!-- Mode Panel -->
+                <section class="panel mode-panel">
+                    <div class="mode-left">
+                        <div class="mode-icon-wrap">
+                            <i class="fa-solid fa-satellite-dish"></i>
+                        </div>
+                        <div class="mode-info">
+                            <div class="mode-title-row">
+                                <h2>Pusat Monitoring & Kontrol</h2>
+                                <span class="live-tag">
+                                    <span class="live-dot"></span> Live
+                                </span>
+                            </div>
+                            <p id="mode-text">Sistem berjalan secara otomatis berdasarkan sensor</p>
+                        </div>
+                    </div>
+                    <div class="mode-switch">
+                        <span id="label-manual" class="mode-label">Manual</span>
+                        <label class="switch">
+                            <input type="checkbox" id="mode-toggle" checked>
+                            <span class="slider round"></span>
+                        </label>
+                        <span id="label-auto" class="mode-label active">Auto</span>
+                    </div>
+                </section>
+
+                <!-- Section Title -->
+                <div class="section-title">
+                    <div class="section-title-left">
+                        <span class="section-line"></span>
+                        <h2>Monitoring Sensor</h2>
+                    </div>
+                    <span class="section-meta">Real-time</span>
+                </div>
+
+                <!-- Stats Row -->
+                <section class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-glow"></div>
+                        <div class="stat-top">
+                            <div class="stat-icon-wrap sun">
+                                <i class="fa-solid fa-sun"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Cahaya Luar</span>
+                                <span class="stat-sub">BH1750 · Outdoor</span>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="lux-luar">
+                            450 <small>Lux</small>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="stat-progress-bar" id="bar-luar"></div>
+                        </div>
+                        <div class="stat-footer">
+                            <span class="badge badge-green" id="status-luar">Kondisi Terang</span>
+                            <span class="stat-max">max 800</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-glow"></div>
+                        <div class="stat-top">
+                            <div class="stat-icon-wrap teal">
+                                <i class="fa-solid fa-house-chimney-window"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Cahaya Dalam</span>
+                                <span class="stat-sub">BH1750 · Indoor</span>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="lux-dalam">
+                            120 <small>Lux</small>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="stat-progress-bar" id="bar-dalam"></div>
+                        </div>
+                        <div class="stat-footer">
+                            <span class="badge badge-orange" id="status-dalam">Kondisi Redup</span>
+                            <span class="stat-max">max 200</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-glow"></div>
+                        <div class="stat-top">
+                            <div class="stat-icon-wrap gray" id="icon-pir-wrapper">
+                                <i id="icon-pir" class="fa-solid fa-person-walking"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Sensor Gerak</span>
+                                <span class="stat-sub">PIR · HC-SR501</span>
+                            </div>
+                        </div>
+                        <div class="stat-value text-medium" id="status-pir">
+                            Tidak Ada Gerak
+                        </div>
+                        <div class="stat-wave">
+                            <span></span><span></span><span></span><span></span><span></span>
+                            <span></span><span></span><span></span><span></span><span></span>
+                        </div>
+                        <div class="stat-footer">
+                            <span class="badge badge-gray" id="badge-pir">Ruangan Kosong</span>
+                            <span class="stat-max">idle</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section Title: Visualisasi Data -->
+                <div class="section-title">
+                    <div class="section-title-left">
+                        <span class="section-line"></span>
+                        <h2>Visualisasi Data</h2>
+                    </div>
+                    <span class="section-meta">Live Chart</span>
+                </div>
+
+                <!-- Chart Row -->
+                <section class="chart-row">
+                    <!-- Line Chart: Tren Lux -->
+                    <div class="panel chart-panel">
+                        <div class="chart-header">
+                            <div>
+                                <h3><i class="fa-solid fa-chart-line"></i> Tren Intensitas Cahaya</h3>
+                                <p>10 data terakhir · diperbarui tiap 4 detik</p>
+                            </div>
+                            <div class="chart-legend">
+                                <span class="legend-item">
+                                    <span class="legend-dot orange"></span> Luar
+                                </span>
+                                <span class="legend-item">
+                                    <span class="legend-dot teal"></span> Dalam
+                                </span>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Bar Chart: Aktivitas -->
+                    <div class="panel chart-panel">
+                        <div class="chart-header">
+                            <div>
+                                <h3><i class="fa-solid fa-chart-column"></i> Distribusi Event</h3>
+                                <p>Klasifikasi log berdasarkan kategori</p>
+                            </div>
+                            <span class="chart-total" id="chart-total">0 event</span>
+                        </div>
+                        <div class="bar-chart" id="barChart">
+                            <!-- Diisi oleh JavaScript -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section Title -->
+                <div class="section-title">
+                    <div class="section-title-left">
+                        <span class="section-line"></span>
+                        <h2>Kontrol Aktuator</h2>
+                    </div>
+                    <span class="section-meta">2 Relay Channel</span>
+                </div>
+
+                <!-- Control Row -->
+                <section class="control-row">
+                    <div class="control-card" id="card-luar">
+                        <div class="control-info">
+                            <div class="control-icon">
+                                <i id="icon-lamp-luar" class="fa-solid fa-lightbulb icon-bulb off"></i>
+                            </div>
+                            <div class="control-text">
+                                <h3>Lampu Luar</h3>
+                                <p>Relay Channel 1 · GPIO 12</p>
+                            </div>
+                        </div>
+                        <div class="control-action">
+                            <span class="control-state" id="state-luar">OFF</span>
+                            <label class="switch">
+                                <input type="checkbox" id="lamp-luar-toggle" disabled>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="control-card" id="card-dalam">
+                        <div class="control-info">
+                            <div class="control-icon">
+                                <i id="icon-lamp-dalam" class="fa-solid fa-lightbulb icon-bulb off"></i>
+                            </div>
+                            <div class="control-text">
+                                <h3>Lampu Dalam</h3>
+                                <p>Relay Channel 2 · GPIO 13</p>
+                            </div>
+                        </div>
+                        <div class="control-action">
+                            <span class="control-state" id="state-dalam">OFF</span>
+                            <label class="switch">
+                                <input type="checkbox" id="lamp-dalam-toggle" disabled>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- PAGE 2: RIWAYAT EVENT -->
+            <div id="page-logs" class="page-content">
+                <div class="section-title">
+                    <div class="section-title-left">
+                        <span class="section-line"></span>
+                        <h2>Riwayat Aktivitas Sistem</h2>
+                    </div>
+                    <span class="section-meta">Supabase Mock</span>
+                </div>
+
+                <section class="panel log-panel">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Kategori</th>
+                                    <th>Aktivitas Sistem</th>
+                                </tr>
+                            </thead>
+                            <tbody id="log-table-body"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- PAGE 3: PENGATURAN -->
+            <div id="page-settings" class="page-content">
+                <div class="section-title">
+                    <div class="section-title-left">
+                        <span class="section-line"></span>
+                        <h2>Konfigurasi Ambang Batas</h2>
+                    </div>
+                    <span class="section-meta">Threshold</span>
+                </div>
+
+                <section class="stats-row">
+                    <div class="stat-card form-card">
+                        <div class="stat-top">
+                            <div class="stat-icon-wrap sun">
+                                <i class="fa-solid fa-cloud-moon"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Ambang Luar</span>
+                                <span class="stat-sub">Lampu menyala saat gelap</span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <input type="number" id="input-thresh-luar" value="100" min="0" max="1000">
+                            <span class="unit-append">Lux</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card form-card">
+                        <div class="stat-top">
+                            <div class="stat-icon-wrap teal">
+                                <i class="fa-solid fa-person-shelter"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Ambang Dalam</span>
+                                <span class="stat-sub">Lampu menyala saat redup</span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <input type="number" id="input-thresh-dalam" value="80" min="0" max="1000">
+                            <span class="unit-append">Lux</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="panel save-panel">
+                    <div class="save-panel-content">
+                        <div class="save-info">
+                            <div class="save-icon">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                            </div>
+                            <div>
+                                <h3>Simpan Konfigurasi</h3>
+                                <p>Perubahan diterapkan tanpa perlu re-flash ESP8266</p>
+                            </div>
+                        </div>
+                        <div class="save-actions">
+                            <button class="btn-save" onclick="saveSettings()">
+                                <i class="fa-solid fa-check"></i> Terapkan
+                            </button>
+                            <span id="save-feedback" class="feedback-msg">
+                                <i class="fa-solid fa-circle-check"></i> Berhasil
+                            </span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-left">
+                <span class="footer-dot"></span>
+                <span>System Running</span>
+            </div>
+            <div class="footer-center">
+                <p>Developed by <strong>Kelompok 3 · TRM B</strong></p>
+            </div>
+            <div class="footer-right">
+                <span>Smart Home Lighting IoT · 2025</span>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        // ============================================
+        // SPA NAVIGATION
+        // ============================================
+        function openPage(evt, pageName) {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-link').forEach(t => t.classList.remove('active'));
+            document.getElementById(pageName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+            // Redraw chart saat pindah halaman
+            if (pageName === 'page-dashboard') {
+                setTimeout(drawLineChart, 50);
+            }
+        }
+
+        // ============================================
+        // VARIABEL GLOBAL
+        // ============================================
+        let thresholdLuar = 100;
+        let thresholdDalam = 80;
+
+        // --- Elemen DOM ---
+        const modeToggle = document.getElementById('mode-toggle');
+        const lampLuarToggle = document.getElementById('lamp-luar-toggle');
+        const lampDalamToggle = document.getElementById('lamp-dalam-toggle');
+        const iconLampLuar = document.getElementById('icon-lamp-luar');
+        const iconLampDalam = document.getElementById('icon-lamp-dalam');
+        const logTableBody = document.getElementById('log-table-body');
+        const iconPirWrapper = document.getElementById('icon-pir-wrapper');
+        const stateLuar = document.getElementById('state-luar');
+        const stateDalam = document.getElementById('state-dalam');
+
+        // ============================================
+        // CHART SYSTEM
+        // ============================================
+        const luxLuarHistory = [450, 420, 380, 350, 400, 480, 520, 490, 460, 440];
+        const luxDalamHistory = [120, 130, 110, 140, 150, 120, 100, 90, 110, 130];
+        const maxHistory = 10;
+
+        const lineCanvas = document.getElementById('lineChart');
+        const lineCtx = lineCanvas.getContext('2d');
+
+        function drawLineChart() {
+            if (!lineCanvas || !lineCtx) return;
+
+            const dpr = window.devicePixelRatio || 1;
+            const rect = lineCanvas.getBoundingClientRect();
+            const w = rect.width;
+            const h = rect.height;
+
+            if (w === 0 || h === 0) return;
+
+            lineCanvas.width = w * dpr;
+            lineCanvas.height = h * dpr;
+            lineCtx.setTransform(1, 0, 0, 1, 0, 0);
+            lineCtx.scale(dpr, dpr);
+            lineCtx.clearRect(0, 0, w, h);
+
+            const padding = { top: 12, right: 12, bottom: 22, left: 32 };
+            const chartW = w - padding.left - padding.right;
+            const chartH = h - padding.top - padding.bottom;
+            const maxValue = 800;
+
+            // Grid horizontal + label
+            lineCtx.strokeStyle = 'rgba(63, 185, 80, 0.08)';
+            lineCtx.lineWidth = 1;
+            lineCtx.font = '9px Inter, sans-serif';
+            lineCtx.fillStyle = 'rgba(107, 118, 130, 0.7)';
+            lineCtx.textAlign = 'right';
+            lineCtx.textBaseline = 'middle';
+
+            for (let i = 0; i <= 4; i++) {
+                const y = padding.top + (chartH / 4) * i;
+                const value = Math.round(maxValue - (maxValue / 4) * i);
+
+                lineCtx.beginPath();
+                lineCtx.moveTo(padding.left, y);
+                lineCtx.lineTo(w - padding.right, y);
+                lineCtx.stroke();
+
+                lineCtx.fillText(value, padding.left - 6, y);
+            }
+
+            // Grid vertikal
+            lineCtx.strokeStyle = 'rgba(63, 185, 80, 0.05)';
+            for (let i = 0; i <= maxHistory - 1; i += 3) {
+                const x = padding.left + (chartW / (maxHistory - 1)) * i;
+                lineCtx.beginPath();
+                lineCtx.moveTo(x, padding.top);
+                lineCtx.lineTo(x, h - padding.bottom);
+                lineCtx.stroke();
+            }
+
+            // Fungsi gambar line
+            function drawLine(data, color, gradientTop, gradientBottom) {
+                if (data.length < 2) return;
+
+                const points = data.map((val, i) => ({
+                    x: padding.left + (chartW / (maxHistory - 1)) * i,
+                    y: padding.top + chartH - (Math.min(val, maxValue) / maxValue) * chartH
+                }));
+
+                // Gradient fill area
+                const gradient = lineCtx.createLinearGradient(0, padding.top, 0, h - padding.bottom);
+                gradient.addColorStop(0, gradientTop);
+                gradient.addColorStop(1, gradientBottom);
+
+                lineCtx.beginPath();
+                lineCtx.moveTo(points[0].x, h - padding.bottom);
+                points.forEach(p => lineCtx.lineTo(p.x, p.y));
+                lineCtx.lineTo(points[points.length - 1].x, h - padding.bottom);
+                lineCtx.closePath();
+                lineCtx.fillStyle = gradient;
+                lineCtx.fill();
+
+                // Line stroke
+                lineCtx.beginPath();
+                points.forEach((p, i) => {
+                    if (i === 0) lineCtx.moveTo(p.x, p.y);
+                    else lineCtx.lineTo(p.x, p.y);
+                });
+                lineCtx.strokeStyle = color;
+                lineCtx.lineWidth = 2;
+                lineCtx.lineJoin = 'round';
+                lineCtx.lineCap = 'round';
+                lineCtx.shadowColor = color;
+                lineCtx.shadowBlur = 8;
+                lineCtx.stroke();
+                lineCtx.shadowBlur = 0;
+
+                // Titik data
+                points.forEach((p, i) => {
+                    const isLast = i === points.length - 1;
+                    lineCtx.beginPath();
+                    lineCtx.arc(p.x, p.y, isLast ? 4 : 2.5, 0, Math.PI * 2);
+                    lineCtx.fillStyle = color;
+                    lineCtx.fill();
+
+                    if (isLast) {
+                        lineCtx.beginPath();
+                        lineCtx.arc(p.x, p.y, 8, 0, Math.PI * 2);
+                        lineCtx.fillStyle = gradientTop;
+                        lineCtx.fill();
+                    }
+                });
+            }
+
+            drawLine(luxDalamHistory, 'rgb(79, 209, 197)', 'rgba(79, 209, 197, 0.25)', 'rgba(79, 209, 197, 0)');
+            drawLine(luxLuarHistory, 'rgb(246, 173, 85)', 'rgba(246, 173, 85, 0.25)', 'rgba(246, 173, 85, 0)');
+
+            // Label sumbu X
+            lineCtx.fillStyle = 'rgba(107, 118, 130, 0.6)';
+            lineCtx.font = '9px Inter, sans-serif';
+            lineCtx.textAlign = 'center';
+            lineCtx.textBaseline = 'top';
+            lineCtx.fillText('30s lalu', padding.left + 20, h - padding.bottom + 6);
+            lineCtx.fillText('Sekarang', w - padding.right - 20, h - padding.bottom + 6);
+        }
+
+        function updateBarChart() {
+            const barChart = document.getElementById('barChart');
+            if (!barChart) return;
+
+            const counts = { Sistem: 0, Mode: 0, Aktuator: 0, Otomatisasi: 0 };
+            document.querySelectorAll('#log-table-body tr').forEach(row => {
+                const cat = row.querySelector('.category-col');
+                if (cat) {
+                    const text = cat.textContent.trim();
+                    if (counts[text] !== undefined) counts[text]++;
+                }
+            });
+
+            const total = Object.values(counts).reduce((a, b) => a + b, 0) || 1;
+            const categories = [
+                { key: 'Sistem', class: 'sistem' },
+                { key: 'Mode', class: 'mode' },
+                { key: 'Aktuator', class: 'aktuator' },
+                { key: 'Otomatisasi', class: 'otomatisasi' }
+            ];
+
+            barChart.innerHTML = categories.map(cat => {
+                const count = counts[cat.key];
+                const percent = (count / total) * 100;
+                return `
+                    <div class="bar-item">
+                        <span class="bar-label">${cat.key}</span>
+                        <div class="bar-track">
+                            <div class="bar-fill ${cat.class}" style="width: ${percent}%"></div>
+                        </div>
+                        <span class="bar-value">${count}</span>
+                    </div>
+                `;
+            }).join('');
+
+            const totalEl = document.getElementById('chart-total');
+            if (totalEl) totalEl.textContent = `${total} event`;
+        }
+
+        // Init chart setelah halaman siap
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                drawLineChart();
+                updateBarChart();
+            }, 100);
+        });
+        window.addEventListener('resize', drawLineChart);
+
+        // ============================================
+        // SAVE SETTINGS
+        // ============================================
+        function saveSettings() {
+            thresholdLuar = parseInt(document.getElementById('input-thresh-luar').value);
+            thresholdDalam = parseInt(document.getElementById('input-thresh-dalam').value);
+            const feedback = document.getElementById('save-feedback');
+            feedback.style.display = 'inline-flex';
+            setTimeout(() => { feedback.style.display = 'none'; }, 3000);
+            addLog('Sistem', `Update Threshold: Luar = ${thresholdLuar} Lux | Dalam = ${thresholdDalam} Lux`);
+        }
+
+        // ============================================
+        // LOGGING
+        // ============================================
+        function addLog(kategori, aktivitas) {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('id-ID');
+            const catColor = kategori === 'Mode' ? '#58a6ff'
+                : kategori === 'Aktuator' ? '#d29922'
+                : kategori === 'Sistem' ? '#58a6ff'
+                : '#3fb950';
+
+            const row = `<tr>
+                <td class="time-col"><i class="fa-regular fa-clock"></i> ${timeStr}</td>
+                <td class="category-col" style="color: ${catColor};">${kategori}</td>
+                <td>${aktivitas}</td>
+            </tr>`;
+            logTableBody.insertAdjacentHTML('afterbegin', row);
+            if (logTableBody.children.length > 50) logTableBody.removeChild(logTableBody.lastChild);
+
+            // Update bar chart
+            updateBarChart();
+        }
+
+        addLog('Sistem', 'Memulai koneksi ke Supabase MQTT Broker...');
+        setTimeout(() => addLog('Sistem', 'Koneksi Berhasil. Data Real-time aktif.'), 1000);
+
+        // ============================================
+        // MODE TOGGLE
+        // ============================================
+        modeToggle.addEventListener('change', (e) => {
+            const isAuto = e.target.checked;
+            document.getElementById('label-auto').classList.toggle('active', isAuto);
+            document.getElementById('label-manual').classList.toggle('active', !isAuto);
+            document.getElementById('mode-text').innerText = isAuto
+                ? 'Sistem berjalan secara otomatis berdasarkan sensor'
+                : 'Mode manual aktif · sensor diabaikan';
+            lampLuarToggle.disabled = isAuto;
+            lampDalamToggle.disabled = isAuto;
+            addLog('Mode', `Sistem diubah ke mode ${isAuto ? 'AUTO' : 'MANUAL'}`);
+        });
+
+        // ============================================
+        // UPDATE LAMP UI
+        // ============================================
+        function updateLampUI(toggleElem, iconElem, stateElem, cardId) {
+            const card = document.getElementById(cardId);
+            if (toggleElem.checked) {
+                iconElem.classList.remove('off');
+                iconElem.classList.add('on');
+                stateElem.textContent = 'ON';
+                stateElem.classList.add('active');
+                card.classList.add('active');
+            } else {
+                iconElem.classList.remove('on');
+                iconElem.classList.add('off');
+                stateElem.textContent = 'OFF';
+                stateElem.classList.remove('active');
+                card.classList.remove('active');
+            }
+        }
+
+        lampLuarToggle.addEventListener('change', (e) => {
+            updateLampUI(lampLuarToggle, iconLampLuar, stateLuar, 'card-luar');
+            addLog('Aktuator', `Command: Lampu Luar -> ${e.target.checked ? 'ON' : 'OFF'}`);
+        });
+
+        lampDalamToggle.addEventListener('change', (e) => {
+            updateLampUI(lampDalamToggle, iconLampDalam, stateDalam, 'card-dalam');
+            addLog('Aktuator', `Command: Lampu Dalam -> ${e.target.checked ? 'ON' : 'OFF'}`);
+        });
+
+        // ============================================
+        // SIMULASI REAL-TIME
+        // ============================================
+        setInterval(() => {
+            if (!modeToggle.checked) return;
+
+            // 1. Lampu Luar
+            const luxLuar = Math.floor(Math.random() * (800 - 10 + 1)) + 10;
+            document.getElementById('lux-luar').innerHTML = `${luxLuar} <small>Lux</small>`;
+            const statusLuar = document.getElementById('status-luar');
+            const barLuar = document.getElementById('bar-luar');
+            if (barLuar) barLuar.style.width = Math.min((luxLuar / 800) * 100, 100) + '%';
+
+            // Update history line chart
+            luxLuarHistory.push(luxLuar);
+            if (luxLuarHistory.length > maxHistory) luxLuarHistory.shift();
+
+            if (luxLuar < thresholdLuar) {
+                statusLuar.innerText = 'Kondisi Gelap';
+                statusLuar.className = 'badge badge-orange';
+                if (!lampLuarToggle.checked) {
+                    lampLuarToggle.checked = true;
+                    updateLampUI(lampLuarToggle, iconLampLuar, stateLuar, 'card-luar');
+                    addLog('Otomatisasi', `Trigger: Lampu Luar ON (${luxLuar} Lux < ${thresholdLuar} Lux)`);
+                }
+            } else {
+                statusLuar.innerText = 'Kondisi Terang';
+                statusLuar.className = 'badge badge-green';
+                if (lampLuarToggle.checked) {
+                    lampLuarToggle.checked = false;
+                    updateLampUI(lampLuarToggle, iconLampLuar, stateLuar, 'card-luar');
+                    addLog('Otomatisasi', 'Trigger: Lampu Luar OFF (Cahaya cukup)');
+                }
+            }
+
+            // 2. Lampu Dalam
+            const luxDalam = Math.floor(Math.random() * (200 - 10 + 1)) + 10;
+            document.getElementById('lux-dalam').innerHTML = `${luxDalam} <small>Lux</small>`;
+            const statusDalam = document.getElementById('status-dalam');
+            const barDalam = document.getElementById('bar-dalam');
+            if (barDalam) barDalam.style.width = Math.min((luxDalam / 200) * 100, 100) + '%';
+
+            // Update history line chart
+            luxDalamHistory.push(luxDalam);
+            if (luxDalamHistory.length > maxHistory) luxDalamHistory.shift();
+
+            const isRedup = luxDalam < thresholdDalam;
+
+            if (isRedup) {
+                statusDalam.innerText = 'Kondisi Redup';
+                statusDalam.className = 'badge badge-orange';
+            } else {
+                statusDalam.innerText = 'Kondisi Terang';
+                statusDalam.className = 'badge badge-green';
+            }
+
+            // 3. PIR
+            const adaOrang = Math.random() > 0.7;
+            const statusPir = document.getElementById('status-pir');
+            const badgePir = document.getElementById('badge-pir');
+
+            if (adaOrang) {
+                iconPirWrapper.classList.add('active');
+                statusPir.innerText = "Gerakan Terdeteksi";
+                badgePir.innerText = "Ada Orang";
+                badgePir.className = 'badge badge-green';
+                if (!lampDalamToggle.checked && isRedup) {
+                    lampDalamToggle.checked = true;
+                    updateLampUI(lampDalamToggle, iconLampDalam, stateDalam, 'card-dalam');
+                    addLog('Otomatisasi', `Trigger: Lampu Dalam ON (Gerakan & Redup ${luxDalam} Lux)`);
+                }
+            } else {
+                iconPirWrapper.classList.remove('active');
+                statusPir.innerText = "Tidak Ada Gerak";
+                badgePir.innerText = "Ruangan Kosong";
+                badgePir.className = 'badge badge-gray';
+                if (lampDalamToggle.checked) {
+                    lampDalamToggle.checked = false;
+                    updateLampUI(lampDalamToggle, iconLampDalam, stateDalam, 'card-dalam');
+                    addLog('Otomatisasi', 'Trigger: Lampu Dalam OFF (PIR idle)');
+                }
+            }
+
+            // Redraw line chart
+            drawLineChart();
+        }, 4000);
+    </script>
+</body>
+</html>
